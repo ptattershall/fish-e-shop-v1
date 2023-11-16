@@ -34,7 +34,7 @@ const CartClient = () => {
             </div>
             <div>
                 {cartProducts && cartProducts.map((item) => {
-                    return <ItemContent key={item.id} item={item} />
+                    return <ItemContent key={item.id.toString()} item={item} />
                 })}
             </div>
             <div className='border-t-[1.5pc] border-slate-200 py-4 flex justify-between gap-4'>
@@ -42,16 +42,16 @@ const CartClient = () => {
                     <AddToCartButton label='Clear Cart' onClick={() => {handleRemoveAllFromCart()}} small outline />
                 </div>
                 <div className='text-sm flex flex-col gap-1 items-start'>
-                        <div className='flex justify-between w-full text-base font-semibold'>
-                            <span>Subtotal</span>
-                            <span>{formatPrice(cartTotalAmount)}</span>
-                        </div>
-                        <p className='text-slate-500'>Taxes and Shipping calculated at checkout</p>
-                        <AddToCartButton label='Checkout' onClick={() => {}}/>
-                        <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
-                            <MdArrowBack/>
-                            <span>Back to Shop</span>
-                        </Link>
+                    <p className='text-slate-500 text-xs items-center italics'>*tax and shipping calculated at checkout*</p>
+                    <div className='flex justify-between w-full text-base font-semibold'>
+                        <span>Total</span>
+                        <span>{formatPrice(cartTotalAmount)}</span>
+                    </div>
+                    <AddToCartButton label='Checkout' onClick={() => {}}/>
+                    <Link href={"/"} className='text-slate-500 flex items-center gap-1 mt-2'>
+                        <MdArrowBack/>
+                        <span>Back to Shop</span>
+                    </Link>
                 </div>
             </div>
         </div>

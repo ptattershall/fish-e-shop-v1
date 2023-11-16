@@ -18,12 +18,12 @@ const ItemContent: React.FC<ItemContentProps> = ({item}) => {
             <div className="col-span-2 justify-self-start flex gap-2 md:gap-4">
                 <Link href={`/product/${item.id}`}>
                     <div className="relative w-[70px] aspect-square">
-                        <Image src={item.selectedImg.image} alt={truncateText(item.name)} fill className="object-contain"/>
+                        <Image src={item.selectedVar.image} alt={truncateText(item.name)} fill sizes="auto" className="object-contain"/>
                     </div>
                 </Link>
                 <div className="flex flex-col justify-between">
                     <Link href={`/product/${item.id}`}>{truncateText(item.name)}</Link>
-                    <div>{item.selectedImg.color}</div>
+                    <div>{item.selectedVar.color}</div>
                     <div className="w-[70px]">
                         <button className="text-slate-500 underline" onClick={() => handleRemoveFromCart(item)}>Remove</button>
                     </div>

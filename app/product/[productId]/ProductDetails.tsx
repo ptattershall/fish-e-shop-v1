@@ -14,21 +14,24 @@ interface ProductDetailsProps {
     product: any
 }
 
+
 export type CartProductType = {
-    id: string,
+    id: String,
     name: string,
     description: string,
     category: string,
     variation: string,
-    selectedImg: SelectedImgType,
+    selectedVar: SelectedVarType,
     quantity: number,
+    weight: number,
     price: number
 }
 
-export type SelectedImgType = {
+export type SelectedVarType = {
+    id: string,
     color: string,
     colorCode: string,
-    image: string
+    image: string,
 }
 
 const Horizontal = () => {
@@ -45,8 +48,9 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
         description: product.description,
         category: product.category,
         variation: product.variation,
-        selectedImg: {...product.images[0]},
+        selectedVar: {...product.images[0]},
         quantity: 1,
+        weight: product.weight,
         price: product.price
     })
     const router = useRouter()
@@ -66,12 +70,12 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
     }, [cartProducts])
 
 
-    const handleVariationSelect = useCallback((value: SelectedImgType) => {
-        setCartProduct((prev) => ({...prev, selectedImg: value}))
-    }, [cartProduct.selectedImg])
+    const handleVariationSelect = useCallback((value: SelectedVarType) => {
+        setCartProduct((prev) => ({...prev, selectedVar: value}))
+    }, [cartProduct.selectedVar])
 
     const handleQtyIncrease = useCallback(() => {
-        if(cartProduct.quantity === 10) return
+        if(cartProduct.quantity === 25) return
         setCartProduct((prev) => ({...prev, quantity: prev.quantity + 1}))
     }, [cartProduct.quantity])
 
@@ -100,7 +104,7 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                     <span className='font-semibold'>CATEGORY:</span> {product.category}
                 </div>    
                 <div>
-                    <span className='font-semibold'>SERIES:</span> {product.brand}
+                    <span className='font-semibold'>SERIES:</span> {product.variation}
                 </div>
                 <div className={product.inStock ? 'text-emerald-800 bg-emerald-400 rounded-md w-20 text-center' : 'text-red-800 bg-red-500 rounded-md max-w-[100px] text-center'}>{product.inStock ? 'In Stock' : 'Out of Stock'}</div>    
                 <Horizontal/>
@@ -116,8 +120,14 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                             <MdCheck size={20} className='inline-block text-emerald-500 mr-2'/>
                             <span>Product added to cart</span>
                         </p>
-                        <div className='max-w-[300px]'>
-                            <AddToCartButton label="View Cart" outline onClick={() => {router.push('/cart')}} />
+                        <div className='max-w-[300px] flex flex-col'>
+                            <p className='text-xs font-light text-slate-500 italics'>Item is currently in cart</p>
+                            <div className='mt-2'>
+                                <AddToCartButton label="View Cart" outline onClick={() => {router.push('/cart')}} />
+                            </div>
+                            <div className='mt-2'>
+                                <AddToCartButton label='Add to Cart' onClick={() => handleAddToCart(cartProduct)} />
+                            </div>
                         </div>
                     </>
                     ) : (    

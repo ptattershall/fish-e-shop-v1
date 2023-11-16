@@ -5,6 +5,7 @@ import NavBar from './components/nav/NavBar'
 import Footer from './components/footer/Footer'
 import CartProvider from '@/providers/CartProvider'
 import { Toaster } from 'react-hot-toast'
+import { getCurrentUser } from '@/actions/getUser'
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] })
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: 'Mr. Fish Comics online indie comics store. Digital and Phisical comics from the fastest man in indie comics!',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode

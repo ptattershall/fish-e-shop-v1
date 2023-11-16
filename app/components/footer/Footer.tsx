@@ -8,13 +8,13 @@ const Footer = () => {
   return (
     <footer className="bg-slate-700 text-slate-200 text-sm mt-16">
       <Container>
-        <div className="flex flex-col md:flex-row justify-between pt-16 pb-8">
+        <div className="flex flex-col md:flex-row justify-between pt-16 pb-8 pr-2">
             <FooterList>
                 <h3 className="font-bold text-base mb-2">Shop Categories</h3>
                 <Link href="/">All Products</Link>
                 <Link href="/">Comics</Link>
-                <Link href="/">Prints and Posters</Link>
-                <Link href="/">Digital Downloads</Link>
+                <Link href="/">Prints</Link>
+                <Link href="/">Digitals</Link>
                 <Link href="/">Apparel</Link>
             </FooterList>
             <FooterList>

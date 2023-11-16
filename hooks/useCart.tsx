@@ -1,5 +1,4 @@
 import { CartProductType } from '@/app/product/[productId]/ProductDetails';
-import { get } from 'http';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -7,11 +6,13 @@ type CartContextType = {
     cartTotalQty: number,
     cartTotalAmount: number,
     cartProducts: CartProductType[] | null,
+    paymentIntent: string | null,
     handleAddToCart: (product: CartProductType) => void,
     handleRemoveFromCart: (product: CartProductType) => void,
     handleCartQtyIncrease: (product: CartProductType) => void,
     handleCartQtyDecrease: (product: CartProductType) => void,
     handleRemoveAllFromCart: () => void,
+    handleSetPaymentIntent: (value: string | null) => void
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -24,11 +25,16 @@ export const CartContextProvider = (props: Props) => {
     const [cartTotalQty, setCartTotalQty] = useState(0);
     const [cartTotalAmount, setCartTotalAmount] = useState(0);
     const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(null);
+    const [paymentIntent, setPaymentIntent] = useState<string | null>(null);
     useEffect(() => {
         const cartItems: any = localStorage.getItem('mrFishCartItems')
         const cProducts: CartProductType[] | null = JSON.parse(cartItems)
+        const mrFishPaymentIntent: any = localStorage.getItem('mrFishPaymentIntent')
+        const paymentIntent: string | null = JSON.parse(mrFishPaymentIntent)
         setCartProducts(cProducts)
+        setPaymentIntent(paymentIntent)
     }, [])
+
 
     useEffect(() => {
         const getTotals = () => {
@@ -41,7 +47,8 @@ export const CartContextProvider = (props: Props) => {
                 return acc;
             }, {
                 total: 0,
-                qty:0
+                qty:0,
+                weight: 0
             }
             )
             setCartTotalQty(qty)
@@ -64,6 +71,7 @@ export const CartContextProvider = (props: Props) => {
             return updatedCart
         })
     }, [])
+
 
     const handleRemoveFromCart = useCallback((product: CartProductType) => {
         if(cartProducts){
@@ -88,8 +96,7 @@ export const CartContextProvider = (props: Props) => {
             setCartProducts(updatedCart)
             localStorage.setItem('mrFishCartItems', JSON.stringify(updatedCart))
             toast.success('Product quantity increased')
-        }    
-        
+        }
     }, [cartProducts])
 
     const handleCartQtyDecrease = useCallback((product: CartProductType) => {
@@ -106,8 +113,7 @@ export const CartContextProvider = (props: Props) => {
             setCartProducts(updatedCart)
             localStorage.setItem('mrFishCartItems', JSON.stringify(updatedCart))
             toast.success('Product quantity decreased')
-        }    
-        
+        }
     }, [cartProducts])
 
     const handleRemoveAllFromCart = useCallback(() => {
@@ -117,7 +123,23 @@ export const CartContextProvider = (props: Props) => {
         toast.success('Cart cleared')
     }, [cartProducts])
 
-    const value = {cartTotalQty, cartTotalAmount, cartProducts, handleAddToCart, handleRemoveFromCart, handleCartQtyIncrease, handleCartQtyDecrease, handleRemoveAllFromCart}
+    const handleSetPaymentIntent = useCallback((value: string | null) => {
+        setPaymentIntent(value)
+        localStorage.setItem('mrFishPaymentIntent', JSON.stringify(value))
+    }, [paymentIntent])
+
+    const value = {
+        cartTotalQty, 
+        cartTotalAmount, 
+        cartProducts, 
+        paymentIntent, 
+        handleAddToCart, 
+        handleRemoveFromCart, 
+        handleCartQtyIncrease, 
+        handleCartQtyDecrease, 
+        handleRemoveAllFromCart,
+        handleSetPaymentIntent
+    }
 
     return  <CartContext.Provider value={value} {...props}/>
 }
